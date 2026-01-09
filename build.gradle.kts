@@ -92,7 +92,7 @@ dependencies {
 
 tasks.named<ShadowJar>("shadowJar") {
     val relocation = "org.alexdev.unlimitednametags.libraries."
-    relocate("net.byteflux.libby", relocation + "libby.bukkit")
+
     relocate("org.jetbrains", relocation + "jetbrains")
     relocate("org.intellij", relocation + "intellij")
     relocate("de.themoep", relocation + "themoep")
@@ -101,8 +101,7 @@ tasks.named<ShadowJar>("shadowJar") {
     relocate("javax.annotation", relocation + "annotation")
     relocate("com.github.Anon8281.universalScheduler", relocation + "universalScheduler")
     relocate("net.kyori.adventure.text.serializer", "io.github.retrooper.packetevents.adventure.serializer")
-    relocate("net.byteflux.libby", relocation + "libby.bukkit")
-
+    relocate("com.alessiodp.libby", relocation + "libby.bukkit")
     relocate("de.exlll.configlib", "org.alexdev.unlimitednametags.configlib")
 
     dependencies {
@@ -128,8 +127,6 @@ tasks.named<ShadowJar>("shadowJar") {
 
     destinationDirectory.set(file("$rootDir/target"))
     archiveFileName.set("${project.name}.jar")
-
-    minimize()
 }
 
 tasks.withType<JavaCompile> {
