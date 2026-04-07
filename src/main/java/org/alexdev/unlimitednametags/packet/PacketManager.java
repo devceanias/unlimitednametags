@@ -32,10 +32,7 @@ public class PacketManager {
         final ThreadFactory namedThreadFactory = new ThreadFactoryBuilder()
                 .setNameFormat("UnlimitedNameTags-PacketManager-%d")
                 .build();
-        this.executorService = Executors.newFixedThreadPool(
-                Math.max(2, Runtime.getRuntime().availableProcessors() / 2),
-                namedThreadFactory
-        );
+        this.executorService = Executors.newSingleThreadExecutor(namedThreadFactory);
     }
 
     private void initialize() {
@@ -56,12 +53,13 @@ public class PacketManager {
     public void sendPassengersPacket(@NotNull User player, @NotNull PacketNameTag packetNameTag) {
         final int entityId = packetNameTag.getEntityId();
         final int ownerId = packetNameTag.getOwner().getEntityId();
+        final List<Integer> ownerPassengers = new ArrayList<>(passengers.get(packetNameTag.getOwner().getUniqueId()));
+
         executorService.submit(() -> {
             if (player.getChannel() == null) {
                 return;
             }
 
-            final Collection<Integer> ownerPassengers = this.passengers.get(packetNameTag.getOwner().getUniqueId());
             final Set<Integer> passengers = Sets.newHashSetWithExpectedSize(ownerPassengers.size() + 1);
             passengers.addAll(ownerPassengers);
             passengers.add(entityId);

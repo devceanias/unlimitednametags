@@ -173,7 +173,7 @@ public class NameTagManager {
             return 1;
         }
 
-        return (int) attribute.getValue();
+        return (float) attribute.getValue();
     }
 
     public void blockPlayer(@NotNull Player player) {
