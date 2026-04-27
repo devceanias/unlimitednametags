@@ -649,7 +649,15 @@ public class NameTagManager {
             showToOwner(player);
             return;
         }
+
         getPacketDisplayText(target).ifPresent(packetNameTag -> {
+            if (debug) {
+                plugin.getLogger().info(
+                    "update display viewer=" + player.getName() + " target=" + target.getName()
+                    + " trackedByTarget=" + plugin.getTrackerManager().getWhoTracks(target).size()
+                );
+            }
+
             packetNameTag.hideFromPlayerSilently(player);
             packetNameTag.showToPlayer(player);
         });
@@ -666,7 +674,17 @@ public class NameTagManager {
         if (player == target && !plugin.getConfigManager().getSettings().isShowCurrentNameTag()) {
             return;
         }
-        getPacketDisplayText(target).ifPresent(packetNameTag -> packetNameTag.hideFromPlayer(player));
+
+        getPacketDisplayText(target).ifPresent(packetNameTag -> {
+            if (debug) {
+                plugin.getLogger().info(
+                    "remove display viewer=" + player.getName() + " target=" + target.getName()
+                    + " trackedByTarget=" + plugin.getTrackerManager().getWhoTracks(target).size()
+                );
+            }
+
+            packetNameTag.hideFromPlayer(player);
+        });
     }
 
     public void updateDisplaysForPlayer(@NotNull Player player) {

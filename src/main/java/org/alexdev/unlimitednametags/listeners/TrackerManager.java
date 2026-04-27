@@ -78,6 +78,13 @@ public class TrackerManager {
         trackedPlayers.put(player.getUniqueId(), target.getUniqueId());
         trackedBy.put(target.getUniqueId(), player.getUniqueId());
 
+        if (plugin.getNametagManager().isDebug()) {
+            plugin.getLogger().info(
+                "track add viewer=" + player.getName() + " target=" + target.getName()
+                + " trackedByTarget=" + trackedBy.get(target.getUniqueId()).size()
+            );
+        }
+
         plugin.getNametagManager().updateDisplay(player, target);
     }
 
@@ -94,6 +101,14 @@ public class TrackerManager {
     private void removePlayerInternal(@NotNull Player player, @NotNull Player target) {
         trackedPlayers.remove(player.getUniqueId(), target.getUniqueId());
         trackedBy.remove(target.getUniqueId(), player.getUniqueId());
+
+        if (plugin.getNametagManager().isDebug()) {
+            plugin.getLogger().info(
+                "track remove viewer=" + player.getName() + " target=" + target.getName()
+                + " trackedByTarget=" + trackedBy.get(target.getUniqueId()).size()
+            );
+        }
+
         plugin.getNametagManager().removeDisplay(player, target);
     }
 

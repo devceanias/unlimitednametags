@@ -274,6 +274,13 @@ public class PacketNameTag {
 
         updateViewer(player.getUniqueId());
 
+        if (plugin.getNametagManager().isDebug()) {
+            plugin.getLogger().info(
+                "display show viewer=" + player.getName() + " owner=" + owner.getName()
+                + " entityId=" + entityId + " viewers=" + getViewers().size()
+            );
+        }
+
         plugin.getTaskScheduler().runTaskLaterAsynchronously(() -> {
             final User user = getUser(player);
             if (user == null) {
@@ -415,6 +422,18 @@ public class PacketNameTag {
         if (removed) {
             return;
         }
+
+        if (plugin.getNametagManager().isDebug() && player.getUUID() != null) {
+            final Player viewer = plugin.getPlayerListener().getPlayer(player.getUUID());
+
+            if (viewer != null) {
+                plugin.getLogger().info(
+                    "passenger send viewer=" + viewer.getName() + " owner=" + owner.getName()
+                    + " entityId=" + entityId
+                );
+            }
+        }
+
         plugin.getPacketManager().sendPassengersPacket(player, this);
     }
 
@@ -474,6 +493,13 @@ public class PacketNameTag {
         calculatedTextCache.remove(player.getUniqueId());
 
         plugin.getPacketManager().removePassenger(player, entityId);
+
+        if (plugin.getNametagManager().isDebug()) {
+            plugin.getLogger().info(
+                "display hide viewer=" + player.getName() + " owner=" + owner.getName()
+                + " entityId=" + entityId + " viewers=" + getViewers().size()
+            );
+        }
     }
 
     public void clearViewers() {
@@ -497,6 +523,15 @@ public class PacketNameTag {
         perPlayerEntity.getEntities().remove(player.getUniqueId());
         relationalCache.remove(player.getUniqueId());
         calculatedTextCache.remove(player.getUniqueId());
+
+        if (!plugin.getNametagManager().isDebug()) {
+            return;
+        }
+
+        plugin.getLogger().info(
+            "display reset viewer=" + player.getName() + " owner=" + owner.getName()
+            + " entityId=" + entityId + " viewers=" + getViewers().size()
+        );
     }
 
     public boolean canPlayerSee(@NotNull Player player) {
